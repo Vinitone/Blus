@@ -8,15 +8,16 @@ public class Grid : MonoBehaviour
     private int width = 1;
     private Vector3 originPosition;
     [SerializeField]
-    private float cellSize = 1.25f;
+    private float cellSizeX, cellSizeY;
     public int[,] gridArray = new int[10, 15];
     public Vector3[,] posArray = new Vector3[10, 15];
 
-    public Grid(int width, int heigth, float cellSize, Vector3 originPosition)
+    public Grid(int width, int heigth, float cellSizeX, float cellSizeY, Vector3 originPosition)
     {
         this.width = width;
         this.heigth = heigth;
-        this.cellSize = cellSize;
+        this.cellSizeX = cellSizeX;
+        this.cellSizeY = cellSizeY;
         this.originPosition = originPosition;
 
         gridArray = new int[width, heigth];
@@ -30,28 +31,28 @@ public class Grid : MonoBehaviour
         }
     }
 
-    public Vector3 GetNearestPointOnGrid(Vector3 position)
-    {
-        position -= transform.position;
+    //public Vector3 GetNearestPointOnGrid(Vector3 position)
+    //{
+    //    position -= transform.position;
 
-        float xCount = position.x / cellSize;
-        float yCount = position.y / cellSize;
-        float zCount = position.z / cellSize;
+    //    float xCount = position.x / cellSize;
+    //    float yCount = position.y / cellSize;
+    //    float zCount = position.z / cellSize;
 
-        Vector3 result = new Vector3(
-             xCount * cellSize,
-             yCount * cellSize,
-             zCount * cellSize
-            );
+    //    Vector3 result = new Vector3(
+    //         xCount * cellSize,
+    //         yCount * cellSize,
+    //         zCount * cellSize
+    //        );
 
-        result += transform.position;
+    //    result += transform.position;
 
-        return result;
-    }
+    //    return result;
+    //}
 
     private Vector3 GetWorldPosition(int x, int y)
     {
-        return new Vector3(x, y) * cellSize + originPosition;
+        return new Vector3(x*cellSizeX, y*cellSizeY) + originPosition;
     }
 
     //private void OnDrawGizmos()

@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        grid = new Grid(10, 15, 1, this.transform.position);
+        grid = new Grid(10, 15, 1.25f,2.25f, this.transform.position);
         lives = new Health(3);
     }
 
