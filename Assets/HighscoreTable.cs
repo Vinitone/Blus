@@ -2,66 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 public class HighscoreTable : MonoBehaviour
 {
-    private Transform entryContainer;
-    private Transform entryTemplate;
-    private List<HighScoreEntry> highScoreEntryList;
-    private List<Transform> highscoreEntryTransformList;
-    private void Start()
+    public TextMeshProUGUI totalScore;
+    public TextMeshProUGUI highScore;
+    public TextMeshProUGUI elapsedTime;
+
+    private int score = 0, t;
+
+    private static HighscoreTable _instance;
+
+    public static HighscoreTable Instance { get { return _instance; } }
+
+
+    private void Awake()
     {
-        entryContainer = transform.Find("ScoreContainer");
-        entryTemplate = entryContainer.Find("ScoreTemplate");
-
-        entryTemplate.gameObject.SetActive(false);
-
-        highScoreEntryList = new List<HighScoreEntry>
+        if (_instance != null && _instance != this)
         {
-            new HighScoreEntry
-            {
-                score = 123123,
-                name = "VIN"
-            }
-        };
-
-        highscoreEntryTransformList = new List<Transform>();
-
-        foreach(HighScoreEntry entry in highScoreEntryList){
-            CreateHighscoreEntryTransform(entry, entryContainer, highscoreEntryTransformList);
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
         }
     }
 
-    private void CreateHighscoreEntryTransform(HighScoreEntry highScoreEntry, Transform container, List<Transform> transformList)
+    private void Start()
     {
-        float templateheigth = 30f;
-
-        Transform entryTransform = Instantiate(entryTemplate, container);
-        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-        entryRectTransform.anchoredPosition = new Vector2(0, -templateheigth * transformList.Count);
-        entryTransform.gameObject.SetActive(true);
-
-        int rank = transformList.Count + 1;
-        entryTransform.Find("PosText").GetComponent<Text>().text = rank.ToString();
-
-        //TODO real score passed here
-
-        int score = highScoreEntry.score;
-
-        entryTransform.Find("ScoreText").GetComponent<Text>().text = score.ToString();
-
-        //TODO pass name from input
-
-        string name = highScoreEntry.name;
-        entryTransform.Find("NameText").GetComponent<Text>().text = name;
-
-        transformList.Add(entryTransform);
+        highScore.text ="HIGHSCORE: " + PlayerPrefs.GetInt("Highscore").ToString();
+        
     }
-    private class HighScoreEntry
+
+    private void Update()
     {
-        public int score;
-        public string name;
+        totalScore.text = "SCORE: " + score.ToString();
+        t = (int)Time.timeSinceLevelLoad;
+        elapsedTime.text ="TIME: " + t.ToString();
+
+        CalculateScore();
+    }
+
+    public void CalculateScore()
+    {
+        int finalScore = score * t;
+
+
+        if (finalScore > PlayerPrefs.GetInt("Highscore"))
+        {
+            PlayerPrefs.SetInt("Highscore", finalScore);
+        }
+    }
+
+    public void AddScore(int amount)
+    {
+        score += amount;
     }
 }
 

@@ -42,4 +42,12 @@ public class Health : MonoBehaviour
             }
         }
     }
+
+    public void Death()
+    {
+        if(health <= 0)
+        {
+
+        }
+    }
 }

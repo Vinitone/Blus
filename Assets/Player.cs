@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     Health lives;
     private int score = 0;
+    public GameObject building;
+    private Window fires;
     public Grid grid;
     private int x = 0, y = 0;
     // Start is called before the first frame update
@@ -13,6 +15,7 @@ public class Player : MonoBehaviour
     {
         grid = new Grid(10, 15, 1.25f,2.25f, this.transform.position);
         lives = new Health(3);
+        fires = building.GetComponent<Window>();
     }
 
     // Update is called once per frame
@@ -40,9 +43,17 @@ public class Player : MonoBehaviour
         }
             transform.position = grid.posArray[x, y];
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-
+            if (fires.fireArray[x, y].localScale.x > 0.1f || fires.fireArray[x, y].localScale.x > 0.1f || fires.fireArray[x, y].localScale.x > 0.1f)
+            {
+                fires.fireArray[x, y].localScale *= .5f;
+                HighscoreTable.Instance.AddScore(100);
+            }
+            else
+            {
+                fires.fireArray[x, y].localScale = Vector3.zero;
+            }
         }
     }
 
@@ -54,8 +65,7 @@ public class Player : MonoBehaviour
 
     private void TakeDamage()
     {
-        x = 0; y = 0;
-        transform.position = grid.posArray[x, y];
+        transform.position = grid.posArray[0, 0];
         lives.health--;
     }
 }
