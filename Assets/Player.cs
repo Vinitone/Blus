@@ -10,11 +10,12 @@ public class Player : MonoBehaviour
     private Window fires;
     public Grid grid;
     private int x = 0, y = 0;
+    private bool triggered = false;
     // Start is called before the first frame update
     void Awake()
     {
         grid = new Grid(10, 15, 1.25f,2.25f, this.transform.position);
-        lives = new Health(3);
+        lives = gameObject.GetComponent<Health>();
         fires = building.GetComponent<Window>();
     }
 
@@ -57,15 +58,24 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "enemy")
-            TakeDamage();
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.transform.tag == "enemy")
+    //        TakeDamage();
+    //}
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "enemy" && !triggered)
+        {
+            triggered = true;
+            TakeDamage();
+        }
+    }
     private void TakeDamage()
     {
-        transform.position = grid.posArray[0, 0];
+        x = 0; y = 0;
         lives.health--;
+        triggered = false;
     }
 }

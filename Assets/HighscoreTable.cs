@@ -41,13 +41,11 @@ public class HighscoreTable : MonoBehaviour
         totalScore.text = "SCORE: " + score.ToString();
         t = (int)Time.timeSinceLevelLoad;
         elapsedTime.text ="TIME: " + t.ToString();
-
-        CalculateScore();
     }
 
     public void CalculateScore()
     {
-        int finalScore = score * t;
+        int finalScore = score / t;
 
 
         if (finalScore > PlayerPrefs.GetInt("Highscore"))
